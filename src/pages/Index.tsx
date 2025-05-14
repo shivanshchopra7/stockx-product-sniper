@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import UrlForm from '@/components/UrlForm';
 import ResultsTable from '@/components/ResultsTable';
 import EmptyState from '@/components/EmptyState';
 import { Product, ScrapingStatus } from '@/types/product';
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 // Sample data to demonstrate UI until backend is connected
 const sampleProducts: Product[] = [
@@ -26,11 +25,13 @@ const sampleProducts: Product[] = [
       'Style': 'DD1391-100',
       'Colorway': 'White/Black',
       'Release Date': '2021-01-14',
-      'Material': 'Leather'
+      'Material': 'Leather',
     },
-    images: ['https://images.stockx.com/images/Nike-Dunk-Low-Retro-White-Black-2021-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color'],
+    images: [
+      'https://images.stockx.com/images/Nike-Dunk-Low-Retro-White-Black-2021-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color',
+    ],
     url: 'https://stockx.com/nike-dunk-low-retro-white-black-2021',
-    lastScraped: '2024-05-14T12:00:00Z'
+    lastScraped: '2024-05-14T12:00:00Z',
   },
   {
     id: '2',
@@ -50,12 +51,14 @@ const sampleProducts: Product[] = [
       'Style': 'DZ5485-612',
       'Colorway': 'Varsity Red/Black-White',
       'Release Date': '2022-11-19',
-      'Material': 'Leather'
+      'Material': 'Leather',
     },
-    images: ['https://images.stockx.com/images/Air-Jordan-1-Retro-High-OG-Chicago-2022-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color'],
+    images: [
+      'https://images.stockx.com/images/Air-Jordan-1-Retro-High-OG-Chicago-2022-Product.jpg?fit=fill&bg=FFFFFF&w=700&h=500&fm=webp&auto=compress&q=90&dpr=2&trim=color',
+    ],
     url: 'https://stockx.com/air-jordan-1-retro-high-og-chicago-2022',
-    lastScraped: '2024-05-13T09:30:00Z'
-  }
+    lastScraped: '2024-05-13T09:30:00Z',
+  },
 ];
 
 const Index = () => {
@@ -63,58 +66,43 @@ const Index = () => {
   const [scrapingStatus, setScrapingStatus] = useState<ScrapingStatus>({ status: 'idle' });
   const [demoMode, setDemoMode] = useState<boolean>(true);
 
-  const handleUrlSubmit = async (url: string) => {
-    // In actual implementation, this would call the backend API
+const handleUrlSubmit = async (url: string) => {
+  setScrapingStatus({ status: 'loading', message: 'Scraping product data...' });
 
-    // For demo purposes, we're simulating the scraping process
-    setScrapingStatus({ 
-      status: 'loading', 
-      message: 'Connecting to StockX...' 
+  try {
+    const response = await fetch('http://localhost:5000/api/scrape', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
     });
 
-    // Simulate different stages of scraping
-    setTimeout(() => {
-      setScrapingStatus({ 
-        status: 'loading', 
-        message: 'Accessing product page...' 
-      });
-    }, 1000);
+    if (!response.ok) throw new Error('Failed to fetch data');
 
-    setTimeout(() => {
-      setScrapingStatus({ 
-        status: 'loading', 
-        message: 'Extracting product data...' 
-      });
-    }, 2500);
+    const product = await response.json();
+    console.log('Scraped Product Data:', product);  // Log the full product data
 
-    // After "scraping", return the sample data
-    setTimeout(() => {
-      if (demoMode) {
-        setProducts(sampleProducts);
-        setScrapingStatus({ status: 'success' });
-        toast.success("Product data scraped successfully!");
-      } else {
-        setScrapingStatus({ 
-          status: 'error', 
-          message: 'Backend scraping service is not connected yet. Please set up the backend server with Supabase integration.'
-        });
-        toast.error("Backend scraping service not available.");
-      }
-    }, 4000);
-  };
+    setProducts([product]); // For one product
+    setScrapingStatus({ status: 'success' });
+    toast.success('Scraped product data successfully!');
+  } catch (error) {
+    setScrapingStatus({ status: 'error', message: 'Scraping failed' });
+    toast.error('Failed to scrape product data.');
+  }
+};
+
 
   const showSampleData = () => {
     setProducts(sampleProducts);
-    toast.info("Loaded sample product data for preview");
+    toast.info('Loaded sample product data for preview');
   };
 
   return (
     <div className="min-h-screen bg-stockx-dark text-white flex flex-col">
       <Header />
-      
+
       <main className="container mx-auto py-8 px-4 flex-1 space-y-8">
         <UrlForm onSubmit={handleUrlSubmit} scrapingStatus={scrapingStatus} />
-        
+
         <div className="space-y-6">
           {products.length > 0 ? (
             <>
@@ -131,14 +119,11 @@ const Index = () => {
               <ResultsTable products={products} />
             </>
           ) : (
-            <EmptyState 
-              action={showSampleData}
-              actionLabel="View Sample Data"
-            />
+            <EmptyState action={showSampleData} actionLabel="View Sample Data" />
           )}
         </div>
       </main>
-      
+
       <footer className="border-t border-stockx-lightGray py-4 text-center text-sm text-muted-foreground">
         <div className="container mx-auto">
           <p>StockX Scraper - Product Data Extraction Tool &copy; {new Date().getFullYear()}</p>

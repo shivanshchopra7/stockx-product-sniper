@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Product, SortConfig } from '@/types/product';
 import {
@@ -52,30 +51,38 @@ const TableView: React.FC<TableViewProps> = ({ products, sortConfig, handleSort 
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product) => (
+          {products.map((product, index) => (
             <TableRow 
-              key={product.id}
+              key={product.id || product.name || index}
               className="hover:bg-stockx-lightGray/30 border-b border-stockx-lightGray"
             >
-              <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{product.brand}</TableCell>
+              <TableCell className="font-medium">{product.name || '—'}</TableCell>
+              <TableCell>{product.brand || '—'}</TableCell>
               <TableCell className="text-right">
-                <span className="text-stockx-green font-medium">
-                  ${product.currentPrice}
-                </span>
+                {product.currentPrice !== undefined ? (
+                  <span className="text-stockx-green font-medium">
+                    ${product.currentPrice}
+                  </span>
+                ) : (
+                  '—'
+                )}
               </TableCell>
               <TableCell>
-                <Button 
-                  variant="link" 
-                  size="sm" 
-                  className="text-stockx-green p-0"
-                  onClick={() => window.open(product.url, '_blank')}
-                >
-                  View on StockX
-                </Button>
+                {product.url ? (
+                  <Button 
+                    variant="link" 
+                    size="sm" 
+                    className="text-stockx-green p-0"
+                    onClick={() => window.open(product.url, '_blank')}
+                  >
+                    View on StockX
+                  </Button>
+                ) : (
+                  '—'
+                )}
               </TableCell>
               <TableCell className="text-muted-foreground">
-                {format(new Date(product.lastScraped), 'MMM d, yyyy')}
+                {product.lastScraped ? format(new Date(product.lastScraped), 'MMM d, yyyy') : '—'}
               </TableCell>
             </TableRow>
           ))}

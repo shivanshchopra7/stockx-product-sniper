@@ -10,9 +10,10 @@ interface CardGridViewProps {
 const CardGridView: React.FC<CardGridViewProps> = ({ products }) => {
   return (
     <div className="grid gap-4 p-4">
-      {products.map(product => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+      {products.map((product, index) => (
+  <ProductCard key={product.id || index} product={product} />
+))}
+
     </div>
   );
 };
