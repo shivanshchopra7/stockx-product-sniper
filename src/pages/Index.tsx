@@ -70,7 +70,8 @@ const handleUrlSubmit = async (url: string) => {
   setScrapingStatus({ status: 'loading', message: 'Scraping product data...' });
 
   try {
-    const response = await fetch('http://localhost:5000/api/scrape', {
+    const response = await fetch('https://stockx-product-sniper.onrender.com/api/scrape', {
+      // http://localhost:5000/api/scrape
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
