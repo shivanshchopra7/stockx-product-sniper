@@ -70,8 +70,11 @@ const handleUrlSubmit = async (url: string) => {
   setScrapingStatus({ status: 'loading', message: 'Scraping product data...' });
 
   try {
-   const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/scrape`, {
-      // https://stockx-product-sniper.onrender.com/api/scrape
+    const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, ''); // safely remove trailing slash
+    const fullUrl = `${baseUrl}/api/scrape`;
+    console.log('Sending POST to:', fullUrl); // optional debug log
+
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
@@ -80,9 +83,9 @@ const handleUrlSubmit = async (url: string) => {
     if (!response.ok) throw new Error('Failed to fetch data');
 
     const product = await response.json();
-    console.log('Scraped Product Data:', product);  // Log the full product data
+    console.log('Scraped Product Data:', product);
 
-    setProducts([product]); // For one product
+    setProducts([product]); // For a single product
     setScrapingStatus({ status: 'success' });
     toast.success('Scraped product data successfully!');
   } catch (error) {
@@ -90,6 +93,7 @@ const handleUrlSubmit = async (url: string) => {
     toast.error('Failed to scrape product data.');
   }
 };
+
 
 
   const showSampleData = () => {
