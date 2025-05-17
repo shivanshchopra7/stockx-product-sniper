@@ -1,5 +1,5 @@
 const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first'); // Ensures IPv4 resolution comes first
+dns.setDefaultResultOrder('ipv4first');
 
 const express = require('express');
 const { chromium } = require('playwright');
@@ -11,23 +11,21 @@ app.use(express.json());
 
 app.post('/api/scrape', async (req, res) => {
   const { url } = req.body;
+
   if (!url) return res.status(400).json({ error: 'URL is required' });
 
   let browser;
 
   try {
-    // Launch browser in non-headless mode for debugging
+    console.log('🔗 Scraping URL:', url);
+
     browser = await chromium.launch({
-      headless: false, // Change to true for production
-      slowMo: 50, // Slows down steps to better visualize what's happening
+      headless: true,  // ✅ Use headless mode in production!
     });
 
     const page = await browser.newPage();
-
-    // Navigate to the product page
     await page.goto(url, { timeout: 60000, waitUntil: 'networkidle' });
 
-    // Optional: Check for CAPTCHA or access denial
     const pageTitle = await page.title();
     if (
       pageTitle.toLowerCase().includes('access denied') ||
@@ -36,15 +34,13 @@ app.post('/api/scrape', async (req, res) => {
       throw new Error('Blocked by StockX. CAPTCHA or access denied.');
     }
 
-    // Extract product name
     const nameElement = await page.waitForSelector('h1[data-component="primary-product-title"]', { timeout: 20000 });
     const name = await nameElement.textContent();
 
-    // Extract current price using multiple fallbacks
     const priceSelectors = [
-      'h2[data-testid="trade-box-buy-amount"]', // Main Buy Now price
-      'span[data-testid="trade-box-lowest-price"]', // Fallback 1
-      'span[data-testid="trade-box-highest-price"]' // Fallback 2
+      'h2[data-testid="trade-box-buy-amount"]',
+      'span[data-testid="trade-box-lowest-price"]',
+      'span[data-testid="trade-box-highest-price"]'
     ];
 
     let currentPriceText = '';
@@ -61,25 +57,20 @@ app.post('/api/scrape', async (req, res) => {
 
     const currentPrice = parseFloat(currentPriceText.replace(/[^0-9.]/g, ''));
 
-    // Extract image URL (lazy-loaded or not)
     const imageUrl = await page.getAttribute('img', 'data-src') || await page.getAttribute('img', 'src');
     console.log('🖼️ Image URL:', imageUrl);
 
-    // Extract product detail fields (Style, Colorway, etc.)
     const details = {};
-    const detailPairs = await page.$$('div:has(div:has-text("Style")) > div'); // Adjust if needed
+    const detailPairs = await page.$$('div:has(div:has-text("Style")) > div');
 
     for (const container of detailPairs) {
       try {
         const key = await container.$eval('div:nth-child(1)', el => el.textContent?.trim());
         const value = await container.$eval('div:nth-child(2)', el => el.textContent?.trim());
-        if (key && value) {
-          details[key] = value;
-        }
-      } catch {
-        // Ignore malformed rows
-      }
+        if (key && value) details[key] = value;
+      } catch { }
     }
+
     let productDescription = '';
     try {
       const descHandle = await page.waitForSelector('[data-testid="product-description"] p', { timeout: 10000 });
@@ -97,9 +88,10 @@ app.post('/api/scrape', async (req, res) => {
       images: [imageUrl],
       productDescription,
     });
+
   } catch (err) {
     console.error('❌ Scraping failed:', err.message);
-    res.status(500).json({ error: 'Failed to scrape product. Please try again later.' });
+    res.status(500).json({ error: 'Scraping failed', details: err.message }); // ✅ Improved error info
   } finally {
     if (browser) await browser.close();
   }
@@ -107,4 +99,3 @@ app.post('/api/scrape', async (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
