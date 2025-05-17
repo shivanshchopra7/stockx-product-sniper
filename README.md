@@ -1,73 +1,41 @@
-# Welcome to your Lovable project
+Project Overview
+This project is a full-stack web application designed to scrape product data from StockX based on user-provided URLs. The frontend allows users to input StockX URLs, initiate the scraping process, and view the scraped data in a table format. Users can also export the data in CSV or JSON formats.
 
-## Project info
+The backend is built using Node.js and utilizes Playwright for web scraping. The frontend is developed with Next.js and Tailwind CSS to ensure a clean and responsive user interface.
 
-**URL**: https://lovable.dev/projects/e5f2323a-bc41-458b-85be-68964ecd9f83
+Challenges Faced and Unaccomplished Goals:
+Deployment Challenges:
+After deploying the backend on Render and frontend on Vercel, I encountered issues with the backend not responding properly. Despite several attempts, I was unable to resolve the issue, preventing the backend from functioning as expected in the deployed environment.
 
-## How can I edit this code?
+Data Fetching Issues:
+While I was able to scrape certain data such as product images, product names, and descriptions, I encountered difficulties fetching product sizes. Despite implementing various solutions, this aspect could not be fully accomplished.
 
-There are several ways of editing your application.
+Technologies Used:
+Next.js for the full-stack web application.
+Node.js for backend logic and server-side data fetching.
+Playwright for web scraping, enabling the extraction of product data from StockX.
 
-**Use Lovable**
+Features Implemented:
+Scraping Service:
+The backend uses Playwright to scrape product data from StockX, extracting information like product name, market price, description, brand name, product details, and images.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e5f2323a-bc41-458b-85be-68964ecd9f83) and start prompting.
+Frontend:
+Designed with Tailwind CSS for a clean and modern user interface.
+URL input field for users to provide product URLs from StockX.
+Submit button to initiate the scraping process.
+A loading state indicator to inform users of the ongoing process.
+Error display functionality to notify users in case of failure.
+A results table that displays the scraped data with features like sorting and filtering.
 
-Changes made via Lovable will be committed automatically to this repo.
+Data Export Functionality:
+Users can download the scraped data in both CSV and JSON formats.
 
-**Use your preferred IDE**
+Learning and Insights:
+First Scraping Project:
+This was my first experience working on a scraping project. I learned about the scraping process, how to extract data from websites, and how to handle selectors for identifying and extracting the required information.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Client and Server-Side Interaction:
+I gained hands-on experience with client-server communication, particularly the challenges involved in data transfer between the backend (scraping service) and frontend (user interface).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/e5f2323a-bc41-458b-85be-68964ecd9f83) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Note:
+Due to deployment issues, I was unable to successfully deploy the project. However, I am submitting a recording that provides an overview of the project and its functionality.
