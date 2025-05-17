@@ -21,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   } = product;
 
   return (
-    <Card className="w-full bg-stockx-gray border-stockx-lightGray overflow-hidden">
+    <Card className="w-full h-96 bg-stockx-gray border-stockx-lightGray overflow-hidden">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/3 p-4">
           {images.length > 0 ? (
@@ -29,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               <img
                 src={images[0]}
                 alt={name}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-fit"
               />
             </div>
           ) : (
@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <CardContent className="md:w-2/3 p-6 space-y-4">
           <div>
-            <Badge className="mb-2 bg-stockx-green text-white">{brand}</Badge>
+            {/* <Badge className="mb-2 bg-stockx-green text-white">{brand}</Badge> */}
             <h3 className="text-xl font-semibold">{name}</h3>
             <p className="text-muted-foreground mt-1 line-clamp-2">
               {productDescription || 'No description available.'}
