@@ -13,7 +13,7 @@ const sampleProducts: Product[] = [
     name: 'Nike Dunk Low Retro White Black Panda (2021)',
     currentPrice: 129,
     brand: 'Nike',
-    description: 'The Nike Dunk Low Retro White Black brings back a classic basketball shoe for casual wear.',
+    productDescription: 'The Nike Dunk Low Retro White Black brings back a classic basketball shoe for casual wear.',
     sizes: [
       { size: 'US 8', available: true, price: 120 },
       { size: 'US 9', available: true, price: 125 },
@@ -38,7 +38,7 @@ const sampleProducts: Product[] = [
     name: 'Air Jordan 1 Retro High OG Chicago (2022)',
     currentPrice: 355,
     brand: 'Jordan',
-    description: 'The Air Jordan 1 Retro High OG Chicago returns in its original form with premium leather and iconic colorway.',
+    productDescription: 'The Air Jordan 1 Retro High OG Chicago returns in its original form with premium leather and iconic colorway.',
     sizes: [
       { size: 'US 7', available: false },
       { size: 'US 8', available: true, price: 345 },
@@ -70,8 +70,8 @@ const handleUrlSubmit = async (url: string) => {
   setScrapingStatus({ status: 'loading', message: 'Scraping product data...' });
 
   try {
-    const response = await fetch('https://stockx-product-sniper.onrender.com/api/scrape', {
-      // http://localhost:5000/api/scrape
+    const response = await fetch('http://localhost:5000/api/scrape', {
+      // https://stockx-product-sniper.onrender.com/api/scrape
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url }),
@@ -111,11 +111,11 @@ const handleUrlSubmit = async (url: string) => {
                 <h2 className="text-xl font-semibold">
                   Scraped Products ({products.length})
                 </h2>
-                {demoMode && (
+                {/* {demoMode && (
                   <div className="text-xs text-muted-foreground bg-stockx-gray px-2 py-1 rounded">
                     DEMO MODE - Sample Data
                   </div>
-                )}
+                )} */}
               </div>
               <ResultsTable products={products} />
             </>

@@ -11,6 +11,7 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({
   title = "No scraped products yet",
+  
   description = "Enter a StockX URL above to start scraping product data",
   action,
   actionLabel = "Learn More",

@@ -14,7 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     images = [],
     name = 'Unknown Product',
     brand = 'Unknown Brand',
-    description = '',
+    productDescription = '',
     currentPrice = 0,
     sizes = [],
     url = '#',
@@ -44,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <Badge className="mb-2 bg-stockx-green text-white">{brand}</Badge>
             <h3 className="text-xl font-semibold">{name}</h3>
             <p className="text-muted-foreground mt-1 line-clamp-2">
-              {description || 'No description available.'}
+              {productDescription || 'No description available.'}
             </p>
           </div>
 

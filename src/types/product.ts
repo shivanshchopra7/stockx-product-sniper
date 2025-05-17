@@ -4,7 +4,7 @@ export interface Product {
   name: string;
   currentPrice: number;
   brand: string;
-  description: string;
+  productDescription: string;
   sizes: Size[];
   details: Record<string, string>;
   images: string[];
